@@ -8,6 +8,7 @@ import AdminPanel from './pages/AdminPanel'
 import MentorDirectory from './pages/MentorDirectory'
 import ProtectedRoute from './components/Shared/ProtectedRoute'
 import PublicRoute from './components/Shared/PublicRoute'
+import MentorRegister from './pages/MentorRegister'
 
 export default function App() {
   return (
@@ -20,6 +21,9 @@ export default function App() {
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
         <Route path="/mentors" element={<ProtectedRoute><MentorDirectory /></ProtectedRoute>} />
+        <Route path="/mentor/register" element={
+  <ProtectedRoute><MentorRegister /></ProtectedRoute>
+} />
         <Route path="*" element={
           <div style={{
             minHeight: '100vh', display: 'flex', alignItems: 'center',
