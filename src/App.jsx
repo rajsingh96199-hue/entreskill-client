@@ -10,6 +10,7 @@ import ProtectedRoute from './components/Shared/ProtectedRoute'
 import PublicRoute from './components/Shared/PublicRoute'
 import MentorRegister from './pages/MentorRegister'
 import RoadmapPage from './pages/RoadmapPage'
+import IdeasPage from './pages/IdeasPage'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/mentor/register" element={
   <ProtectedRoute><MentorRegister /></ProtectedRoute>
 } />
+        <Route path="/ideas" element={<ProtectedRoute><IdeasPage /></ProtectedRoute>} />
 
         <Route path="/roadmap" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
         <Route path="/roadmap/:ideaId" element={

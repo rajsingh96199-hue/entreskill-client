@@ -39,6 +39,7 @@ export default function Navbar() {
         <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
           {[
             { path: '/dashboard', label: '🏠 Home' },
+            { path: '/ideas', label: '💡 Ideas' },
             { path: '/mentors', label: '👥 Mentors' },
             { path: '/onboarding', label: '🎯 Find Ideas' },
             ...(user?.role === 'admin' ? [{ path: '/admin', label: '⚙️ Admin' }] : []),
