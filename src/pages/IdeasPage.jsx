@@ -50,16 +50,20 @@ export default function IdeasPage() {
     setTimeout(() => setMessage(''), 3000)
   }
 
-  const handleSave = async (ideaId) => {
-    setSaving(ideaId)
-    try {
-      const res = await api.post(`/ideas/${ideaId}/save`, {}, { headers })
-      showMsg(res.data.saved ? '✅ Idea saved!' : '🗑️ Idea removed!')
-    } catch (err) {
-      showMsg('❌ Please login to save ideas')
-    }
-    setSaving(null)
+ const handleSave = async (ideaId) => {
+  if (!token) {
+    navigate('/login')
+    return
   }
+  setSaving(ideaId)
+  try {
+    const res = await api.post(`/ideas/${ideaId}/save`, {}, { headers })
+    showMsg(res.data.saved ? '✅ Idea saved!' : '🗑️ Idea removed!')
+  } catch (err) {
+    showMsg('❌ Failed to save idea')
+  }
+  setSaving(null)
+}
 
   // Filter by search locally
   const filtered = ideas.filter(idea =>

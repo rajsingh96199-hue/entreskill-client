@@ -27,7 +27,7 @@ export default function App() {
   <ProtectedRoute><MentorRegister /></ProtectedRoute>
 } />
         <Route path="/ideas" element={<ProtectedRoute><IdeasPage /></ProtectedRoute>} />
-
+        <Route path="/ideas" element={<IdeasPage />} />
         <Route path="/roadmap" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
         <Route path="/roadmap/:ideaId" element={
   <ProtectedRoute><RoadmapPage /></ProtectedRoute>} />

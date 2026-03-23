@@ -100,6 +100,16 @@ export default function LandingPage() {
               borderRadius: 12, padding: '14px 36px',
               fontSize: 16, fontWeight: 700, cursor: 'pointer'
             }}>
+               💡 Explore Ideas
+  </button>
+  <button
+    onClick={() => navigate('/login')}
+    style={{
+      background: 'transparent', color: '#fff',
+      border: '2px solid rgba(255,255,255,0.4)',
+      borderRadius: 12, padding: '14px 36px',
+      fontSize: 16, fontWeight: 700, cursor: 'pointer'
+    }}>
             Login
           </button>
         </div>

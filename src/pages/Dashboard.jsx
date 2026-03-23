@@ -247,18 +247,18 @@ export default function Dashboard() {
             </h3>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               {[
-                { label: '🔍 Explore Ideas', tab: 'ideas' },
-                { label: '📚 Browse Resources', tab: 'resources' },
-                { label: '👥 Meet Mentors', tab: 'mentors' },
-                { label: '🗺️ Continue Roadmap', tab: 'roadmap' },
-              ].map(a => (
-                <button key={a.label} onClick={() => setActiveTab(a.tab)} style={{
-                  background: '#fff', color: '#14213D',
-                  border: '2px solid #E5E7EB', borderRadius: 10,
-                  padding: '10px 18px', fontSize: 13,
-                  fontWeight: 600, cursor: 'pointer'
-                }}>{a.label}</button>
-              ))}
+  { label: '🔍 Explore Ideas', path: '/ideas' },
+  { label: '📚 Browse Resources', tab: 'resources' },
+  { label: '👥 Meet Mentors', path: '/mentors' },
+  { label: '🗺️ Continue Roadmap', tab: 'roadmap' },
+].map(a => (
+  <button key={a.label} onClick={() => a.path ? navigate(a.path) : setActiveTab(a.tab)} style={{
+    background: '#fff', color: '#14213D',
+    border: '2px solid #E5E7EB', borderRadius: 10,
+    padding: '10px 18px', fontSize: 13,
+    fontWeight: 600, cursor: 'pointer'
+  }}>{a.label}</button>
+))}
             </div>
           </div>
         )}
@@ -267,14 +267,22 @@ export default function Dashboard() {
         {activeTab === 'ideas' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-              <h3 style={{ fontSize: 16, fontWeight: 800, color: '#14213D' }}>💡 Recommended Ideas</h3>
-              <button onClick={() => navigate('/onboarding')} style={{
-                background: '#0D7377', color: '#fff',
-                border: 'none', borderRadius: 8,
-                padding: '8px 16px', fontSize: 12,
-                fontWeight: 700, cursor: 'pointer'
-              }}>+ Update Profile</button>
-            </div>
+  <h3 style={{ fontSize: 16, fontWeight: 800, color: '#14213D' }}>💡 Recommended Ideas</h3>
+  <div style={{ display: 'flex', gap: 8 }}>
+    <button onClick={() => navigate('/ideas')} style={{
+      background: '#E0F2F1', color: '#0D7377',
+      border: 'none', borderRadius: 8,
+      padding: '8px 16px', fontSize: 12,
+      fontWeight: 700, cursor: 'pointer'
+    }}>Browse All →</button>
+    <button onClick={() => navigate('/onboarding')} style={{
+      background: '#0D7377', color: '#fff',
+      border: 'none', borderRadius: 8,
+      padding: '8px 16px', fontSize: 12,
+      fontWeight: 700, cursor: 'pointer'
+    }}>+ Update Profile</button>
+  </div>
+</div>
             {loading ? (
               <div style={{ textAlign: 'center', padding: '20px', color: '#6B7280' }}>⏳ Loading...</div>
             ) : recommended.length === 0 ? (
