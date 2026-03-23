@@ -260,51 +260,65 @@ function StepResults({ ideas, loading, onRestart }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
-        {ideas.map((idea, idx) => (
-          <div key={idea._id || idx} style={{
-            border: `2px solid ${idx === 0 ? '#F4A261' : '#E5E7EB'}`,
-            borderRadius: 14, padding: '14px 16px',
-            background: idx === 0 ? '#FFF7ED' : '#fff',
-            display: 'flex', alignItems: 'center', gap: 14
-          }}>
-            <div style={{
-              width: 46, height: 46, borderRadius: 12,
-              background: idx === 0 ? '#F4A26120' : '#E0F2F1',
-              display: 'flex', alignItems: 'center',
-              justifyContent: 'center', fontSize: 24, flexShrink: 0
-            }}>
-              {idea.icon || '💡'}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-                <span style={{ fontWeight: 700, fontSize: 14, color: '#14213D' }}>{idea.title}</span>
-                {idx === 0 && (
-                  <span style={{
-                    background: '#F4A26120', color: '#F4A261',
-                    border: '1px solid #F4A26140', borderRadius: 20,
-                    padding: '1px 8px', fontSize: 10, fontWeight: 700
-                  }}>Best Match</span>
-                )}
-              </div>
-              <div style={{ fontSize: 12, color: '#6B7280', marginBottom: 6 }}>{idea.description}</div>
-              {idea.matchPercentage && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <div style={{ height: 5, width: 80, background: '#F3F4F6', borderRadius: 3 }}>
-                    <div style={{
-                      height: '100%', width: `${idea.matchPercentage}%`,
-                      background: 'linear-gradient(90deg, #0D7377, #F4A261)',
-                      borderRadius: 3
-                    }} />
-                  </div>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#0D7377' }}>
-                    {idea.matchPercentage}% match
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+  {ideas.map((idea, idx) => (
+    <div key={idea._id || idx} style={{
+      border: `2px solid ${idx === 0 ? '#F4A261' : '#E5E7EB'}`,
+      borderRadius: 14, padding: '14px 16px',
+      background: idx === 0 ? '#FFF7ED' : '#fff',
+      display: 'flex', alignItems: 'center', gap: 14
+    }}>
+      <div style={{
+        width: 46, height: 46, borderRadius: 12,
+        background: idx === 0 ? '#F4A26120' : '#E0F2F1',
+        display: 'flex', alignItems: 'center',
+        justifyContent: 'center', fontSize: 24, flexShrink: 0
+      }}>
+        {idea.icon || '💡'}
       </div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+          <span style={{ fontWeight: 700, fontSize: 14, color: '#14213D' }}>{idea.title}</span>
+          {idx === 0 && (
+            <span style={{
+              background: '#F4A26120', color: '#F4A261',
+              border: '1px solid #F4A26140', borderRadius: 20,
+              padding: '1px 8px', fontSize: 10, fontWeight: 700
+            }}>Best Match</span>
+          )}
+        </div>
+        <div style={{ fontSize: 12, color: '#6B7280', marginBottom: 6 }}>{idea.description}</div>
+        {idea.matchPercentage && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ height: 5, width: 80, background: '#F3F4F6', borderRadius: 3 }}>
+              <div style={{
+                height: '100%', width: `${idea.matchPercentage}%`,
+                background: 'linear-gradient(90deg, #0D7377, #F4A261)',
+                borderRadius: 3
+              }} />
+            </div>
+            <span style={{ fontSize: 11, fontWeight: 700, color: '#0D7377' }}>
+              {idea.matchPercentage}% match
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* ✅ Added View Roadmap Button */}
+      <button
+        onClick={() => navigate(`/roadmap/${idea._id}`)}
+        style={{
+          background: idx === 0 ? '#F4A261' : '#0D7377',
+          color: '#fff', border: 'none',
+          borderRadius: 8, padding: '8px 14px',
+          fontSize: 12, fontWeight: 700,
+          cursor: 'pointer', flexShrink: 0
+        }}>
+        View →
+      </button>
+
+    </div>
+  ))}
+</div>
 
       {/* Mentor Banner */}
       <div style={{

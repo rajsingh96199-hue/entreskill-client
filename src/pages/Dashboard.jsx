@@ -203,12 +203,12 @@ export default function Dashboard() {
                         {topIdea.description}
                       </p>
                       <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={() => setActiveTab('roadmap')} style={{
+                        <button onClick={() => navigate(`/roadmap/${topIdea._id}`)} style={{
                           background: '#0D7377', color: '#fff',
                           border: 'none', borderRadius: 8,
                           padding: '8px 16px', fontSize: 12,
                           fontWeight: 700, cursor: 'pointer'
-                        }}>View Roadmap →</button>
+                          }}>View Roadmap →</button>
                         <button onClick={() => setActiveTab('mentors')} style={{
                           background: 'transparent', color: '#0D7377',
                           border: '2px solid #0D7377', borderRadius: 8,
