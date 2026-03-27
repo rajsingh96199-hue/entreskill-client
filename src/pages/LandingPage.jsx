@@ -80,6 +80,28 @@ export default function LandingPage() {
           ))}
         </div>
 
+        {/* Quick Links */}
+<div style={{
+  display: 'flex', gap: 12,
+  justifyContent: 'center',
+  flexWrap: 'wrap', marginBottom: 24
+}}>
+  {[
+    { label: '💡 Browse Ideas', path: '/ideas' },
+    { label: '📚 Free Resources', path: '/resources' },
+    { label: '👥 Find Mentors', path: '/mentors' },
+  ].map(item => (
+    <button key={item.label} onClick={() => navigate(item.path)} style={{
+      background: 'rgba(255,255,255,0.1)',
+      border: '1px solid rgba(255,255,255,0.3)',
+      color: '#fff', borderRadius: 20,
+      padding: '8px 18px', fontSize: 13,
+      fontWeight: 600, cursor: 'pointer'
+    }}>{item.label}</button>
+  ))}
+</div>
+
+
         {/* Buttons */}
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
           <button

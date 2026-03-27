@@ -247,12 +247,12 @@ export default function Dashboard() {
             </h3>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               {[
-  { label: '🔍 Explore Ideas', path: '/ideas' },
-  { label: '📚 Browse Resources', tab: 'resources' },
-  { label: '👥 Meet Mentors', path: '/mentors' },
-  { label: '🗺️ Continue Roadmap', tab: 'roadmap' },
+  { label: '🔍 Explore Ideas', action: () => navigate('/ideas') },
+  { label: '📚 Browse Resources', action: () => navigate('/resources') },
+  { label: '👥 Meet Mentors', action: () => navigate('/mentors') },
+  { label: '🗺️ Continue Roadmap', action: () => setActiveTab('roadmap') },
 ].map(a => (
-  <button key={a.label} onClick={() => a.path ? navigate(a.path) : setActiveTab(a.tab)} style={{
+  <button key={a.label} onClick={a.action} style={{
     background: '#fff', color: '#14213D',
     border: '2px solid #E5E7EB', borderRadius: 10,
     padding: '10px 18px', fontSize: 13,
@@ -383,6 +383,12 @@ export default function Dashboard() {
             <h3 style={{ fontSize: 16, fontWeight: 800, color: '#14213D', marginBottom: 16 }}>
               📚 Learning Resources
             </h3>
+            <button onClick={() => navigate('/resources')} style={{
+        background: '#0D7377', color: '#fff',
+        border: 'none', borderRadius: 8,
+        padding: '8px 16px', fontSize: 12,
+        fontWeight: 700, cursor: 'pointer'
+      }}>Browse All →</button>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {RESOURCES.map(r => (
                 <div key={r.id} style={{
