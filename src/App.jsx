@@ -11,6 +11,7 @@ import PublicRoute from './components/Shared/PublicRoute'
 import MentorRegister from './pages/MentorRegister'
 import RoadmapPage from './pages/RoadmapPage'
 import IdeasPage from './pages/IdeasPage'
+import ResourcesPage from './pages/ResourcesPage'
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
 } />
         <Route path="/ideas" element={<ProtectedRoute><IdeasPage /></ProtectedRoute>} />
         <Route path="/ideas" element={<IdeasPage />} />
+        <Route path="/resources" element={<ProtectedRoute><ResourcesPage /></ProtectedRoute>} />
         <Route path="/roadmap" element={<ProtectedRoute><RoadmapPage /></ProtectedRoute>} />
         <Route path="/roadmap/:ideaId" element={
   <ProtectedRoute><RoadmapPage /></ProtectedRoute>} />

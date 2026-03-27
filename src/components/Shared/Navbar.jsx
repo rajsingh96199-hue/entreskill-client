@@ -42,6 +42,7 @@ export default function Navbar() {
             { path: '/ideas', label: '💡 Ideas' },
             { path: '/mentors', label: '👥 Mentors' },
             { path: '/onboarding', label: '🎯 Find Ideas' },
+            { path: '/resources', label: '📚 Resources' },
             ...(user?.role === 'admin' ? [{ path: '/admin', label: '⚙️ Admin' }] : []),
           ].map(item => (
             <button
