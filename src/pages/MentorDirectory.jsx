@@ -321,12 +321,7 @@ export default function MentorDirectory() {
             boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
           }}>
 
-          {selectedReview && (
-        <ReviewModal
-          mentor={selectedReview}
-          onClose={() => setSelectedReview(null)}
-        />
-      )}
+          
 
             {/* Modal Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
@@ -417,6 +412,13 @@ export default function MentorDirectory() {
             </form>
           </div>
         </div>
+      )}
+       {/* ✅ Review Modal — SEPARATE from Booking Modal */}
+      {selectedReview && (
+        <ReviewModal
+          mentor={selectedReview}
+          onClose={() => setSelectedReview(null)}
+        />
       )}
     </div>
   )
