@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import axios from 'axios'
+import ReviewModal from '../components/Mentor/ReviewModal'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'
@@ -18,6 +19,7 @@ export default function MentorDirectory() {
   const [bookingLoading, setBookingLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [filter, setFilter] = useState('All')
+  const [selectedReview, setSelectedReview] = useState(null)
 
   const token = localStorage.getItem('token')
   const headers = { Authorization: `Bearer ${token}` }
@@ -262,6 +264,16 @@ export default function MentorDirectory() {
                           }}>
                           {mentor.available ? 'Book Session →' : 'Unavailable'}
                         </button>
+                        <button
+  onClick={() => setSelectedReview(mentor)}
+  style={{
+    background: '#FFF7ED', color: '#F4A261',
+    border: '2px solid #F4A261', borderRadius: 8,
+    padding: '10px 16px', fontSize: 13,
+    fontWeight: 700, cursor: 'pointer'
+  }}>
+  ⭐ Reviews
+</button>
                       </div>
                     </div>
                   </div>
@@ -302,11 +314,20 @@ export default function MentorDirectory() {
           justifyContent: 'center', zIndex: 1000,
           padding: '20px'
         }}>
+          
           <div style={{
             background: '#fff', borderRadius: 20,
             padding: '32px', width: '100%', maxWidth: 480,
             boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
           }}>
+
+          {selectedReview && (
+        <ReviewModal
+          mentor={selectedReview}
+          onClose={() => setSelectedReview(null)}
+        />
+      )}
+
             {/* Modal Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <h3 style={{ fontSize: 20, fontWeight: 800, color: '#14213D', margin: 0 }}>
