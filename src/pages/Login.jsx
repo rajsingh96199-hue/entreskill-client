@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { COLORS, FONTS, SHADOWS, INPUT, LABEL } from '../styles/theme'
 
 export default function Login() {
   const navigate = useNavigate()
@@ -9,157 +10,181 @@ export default function Login() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.email || !form.password) {
-      setError('All fields are required!')
-      return
-    }
-
-    setLoading(true)
-    setError('')
-
+    if (!form.email || !form.password) { setError('All fields are required!'); return }
+    setLoading(true); setError('')
     const result = await login(form.email, form.password)
-
-    if (result.success) {
-      navigate('/dashboard')
-    } else {
-      setError(result.message)
-    }
+    if (result.success) { navigate('/dashboard') } else { setError(result.message) }
     setLoading(false)
   }
 
   return (
     <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #14213D 0%, #0D7377 100%)',
-      display: 'flex', alignItems: 'center',
-      justifyContent: 'center', padding: '20px',
-      fontFamily: 'sans-serif'
+      minHeight: '100vh', fontFamily: FONTS.body,
+      display: 'flex', background: COLORS.gray50,
     }}>
+
+      {/* Left Panel */}
       <div style={{
-        background: '#fff', borderRadius: 20,
-        padding: '40px 36px', width: '100%',
-        maxWidth: 420,
-        boxShadow: '0 20px 60px rgba(0,0,0,0.2)'
+        flex: 1, background: `linear-gradient(145deg, ${COLORS.navy900} 0%, #0D1F3C 100%)`,
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', padding: '60px',
+        position: 'relative', overflow: 'hidden',
       }}>
 
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <div style={{ fontSize: 40, marginBottom: 8 }}>👋</div>
-          <h2 style={{ fontSize: 26, fontWeight: 800, color: '#14213D', marginBottom: 6 }}>
-            Welcome Back
-          </h2>
-          <p style={{ color: '#6B7280', fontSize: 14 }}>
-            Login to continue your journey
+        {/* Background decoration */}
+        <div style={{
+          position: 'absolute', top: -80, right: -80,
+          width: 320, height: 320, borderRadius: '50%',
+          background: 'rgba(201,168,76,0.05)',
+          border: '1px solid rgba(201,168,76,0.08)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: -60, left: -60,
+          width: 240, height: 240, borderRadius: '50%',
+          background: 'rgba(44,79,124,0.15)',
+        }} />
+
+        {/* Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 64 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 8,
+            background: `linear-gradient(135deg, ${COLORS.gold500}, ${COLORS.gold600})`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 16, fontWeight: 800, color: COLORS.navy900,
+          }}>E</div>
+          <span style={{ fontFamily: FONTS.display, fontSize: 20, color: COLORS.white, fontWeight: 700 }}>EntreSkill</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: COLORS.gold500, letterSpacing: 2, textTransform: 'uppercase' }}>HUB</span>
+        </div>
+
+        <h2 style={{
+          fontFamily: FONTS.display, fontSize: 38,
+          fontWeight: 800, color: COLORS.white,
+          lineHeight: 1.15, marginBottom: 16,
+        }}>
+          Welcome back to your{' '}
+          <span style={{ color: COLORS.gold400 }}>entrepreneurship journey</span>
+        </h2>
+        <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', lineHeight: 1.7, marginBottom: 48, maxWidth: 380 }}>
+          Pick up right where you left off. Your roadmaps, ideas, and mentor connections are waiting.
+        </p>
+
+        {/* Testimonial */}
+        <div style={{
+          background: 'rgba(255,255,255,0.04)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          borderRadius: 14, padding: '20px 24px',
+          maxWidth: 400,
+        }}>
+          <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: 14, fontStyle: 'italic' }}>
+            "EntreSkill Hub helped me validate my bakery idea and launch within 3 months. The roadmap was a game changer!"
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 32, height: 32, borderRadius: '50%',
+              background: `linear-gradient(135deg, ${COLORS.gold500}, ${COLORS.gold600})`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 13, fontWeight: 800, color: COLORS.navy900,
+            }}>P</div>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: COLORS.white }}>Priya Sharma</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>Home Bakery Owner, Mumbai</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Panel — Form */}
+      <div style={{
+        width: 480, display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', padding: '60px 56px',
+        background: COLORS.white,
+        boxShadow: '-20px 0 60px rgba(10,22,40,0.08)',
+      }}>
+        <div style={{ marginBottom: 36 }}>
+          <h1 style={{
+            fontFamily: FONTS.display, fontSize: 30,
+            fontWeight: 800, color: COLORS.navy900, marginBottom: 8,
+          }}>Sign In</h1>
+          <p style={{ fontSize: 14, color: COLORS.gray500 }}>
+            Don't have an account?{' '}
+            <span onClick={() => navigate('/register')} style={{
+              color: COLORS.gold500, fontWeight: 700, cursor: 'pointer',
+            }}>Create one free</span>
           </p>
         </div>
 
-        {/* Error */}
         {error && (
           <div style={{
-            background: '#FEE2E2', color: '#B91C1C',
-            borderRadius: 10, padding: '10px 14px',
-            fontSize: 13, marginBottom: 16,
-            border: '1px solid #FECACA'
-          }}>
-            ⚠️ {error}
-          </div>
+            background: COLORS.dangerLight, color: COLORS.danger,
+            borderRadius: 10, padding: '12px 16px',
+            fontSize: 13, marginBottom: 20,
+            border: `1px solid ${COLORS.danger}30`,
+            display: 'flex', alignItems: 'center', gap: 8,
+          }}>⚠️ {error}</div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
-
-          {/* Email */}
-          <div style={{ marginBottom: 16 }}>
-            <label style={{
-              display: 'block', fontSize: 13,
-              fontWeight: 600, color: '#14213D', marginBottom: 6
-            }}>Email Address</label>
+          <div style={{ marginBottom: 20 }}>
+            <label style={LABEL}>Email Address</label>
             <input
-              type="email"
-              name="email"
-              placeholder="e.g. raj@email.com"
-              value={form.email}
-              onChange={handleChange}
-              style={{
-                width: '100%', padding: '12px 14px',
-                borderRadius: 10, fontSize: 14,
-                border: '2px solid #E5E7EB',
-                outline: 'none', color: '#14213D',
-              }}
+              type="email" name="email"
+              placeholder="you@example.com"
+              value={form.email} onChange={handleChange}
+              style={{ ...INPUT, fontFamily: FONTS.body }}
             />
           </div>
 
-          {/* Password */}
           <div style={{ marginBottom: 10 }}>
-            <label style={{
-              display: 'block', fontSize: 13,
-              fontWeight: 600, color: '#14213D', marginBottom: 6
-            }}>Password</label>
+            <label style={LABEL}>Password</label>
             <input
-              type="password"
-              name="password"
+              type="password" name="password"
               placeholder="Enter your password"
-              value={form.password}
-              onChange={handleChange}
-              style={{
-                width: '100%', padding: '12px 14px',
-                borderRadius: 10, fontSize: 14,
-                border: '2px solid #E5E7EB',
-                outline: 'none', color: '#14213D',
-              }}
+              value={form.password} onChange={handleChange}
+              style={{ ...INPUT, fontFamily: FONTS.body }}
             />
           </div>
 
-          {/* Forgot Password */}
-          <div style={{ textAlign: 'right', marginBottom: 24 }}>
-            <span style={{
-              fontSize: 12, color: '#0D7377',
-              fontWeight: 600, cursor: 'pointer'
-            }}>Forgot Password?</span>
+          <div style={{ textAlign: 'right', marginBottom: 28 }}>
+            <span style={{ fontSize: 12, color: COLORS.gold500, fontWeight: 600, cursor: 'pointer' }}>
+              Forgot password?
+            </span>
           </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%', padding: '14px',
-              background: loading ? '#9CA3AF' : '#0D7377',
-              color: '#fff', border: 'none',
-              borderRadius: 12, fontSize: 16,
-              fontWeight: 700,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              marginBottom: 16
-            }}>
-            {loading ? 'Logging in...' : 'Login →'}
+          <button type="submit" disabled={loading} style={{
+            width: '100%', padding: '14px',
+            background: loading ? COLORS.gray300 : `linear-gradient(135deg, ${COLORS.navy700}, ${COLORS.navy900})`,
+            color: COLORS.white, border: 'none',
+            borderRadius: 10, fontSize: 15,
+            fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer',
+            fontFamily: FONTS.body, letterSpacing: '0.3px',
+            boxShadow: loading ? 'none' : SHADOWS.md,
+            marginBottom: 16,
+          }}>
+            {loading ? 'Signing in...' : 'Sign In →'}
           </button>
 
           {/* Divider */}
-          <div style={{
-            display: 'flex', alignItems: 'center',
-            gap: 10, marginBottom: 16
-          }}>
-            <div style={{ flex: 1, height: 1, background: '#E5E7EB' }} />
-            <span style={{ fontSize: 12, color: '#9CA3AF' }}>or</span>
-            <div style={{ flex: 1, height: 1, background: '#E5E7EB' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+            <div style={{ flex: 1, height: 1, background: COLORS.gray200 }} />
+            <span style={{ fontSize: 12, color: COLORS.gray400 }}>or</span>
+            <div style={{ flex: 1, height: 1, background: COLORS.gray200 }} />
           </div>
 
-          {/* Register Link */}
-          <p style={{ textAlign: 'center', fontSize: 13, color: '#6B7280' }}>
-            Don't have an account?{' '}
-            <span
-              onClick={() => navigate('/register')}
-              style={{ color: '#0D7377', fontWeight: 700, cursor: 'pointer' }}>
-              Register here
-            </span>
-          </p>
-
+          <button type="button" onClick={() => navigate('/register')} style={{
+            width: '100%', padding: '13px',
+            background: COLORS.navy50,
+            color: COLORS.navy700,
+            border: `1.5px solid ${COLORS.navy100}`,
+            borderRadius: 10, fontSize: 14,
+            fontWeight: 600, cursor: 'pointer',
+            fontFamily: FONTS.body,
+          }}>
+            Create New Account
+          </button>
         </form>
       </div>
     </div>
