@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,6 +7,51 @@
 }
 
 body {
-  font-family: sans-serif;
-  background: #F8FAF9;
+  font-family: 'Outfit', 'Segoe UI', sans-serif;
+  background: #F8FAFC;
+  color: #0F172A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F1F5F9; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+/* Smooth transitions */
+button { transition: all 0.2s ease; }
+button:hover { opacity: 0.92; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+
+/* Input focus */
+input:focus, textarea:focus, select:focus {
+  border-color: #C9A84C !important;
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.12) !important;
+}
+
+/* Links */
+a { text-decoration: none; }
+
+/* Page transitions */
+.page-enter {
+  animation: fadeUp 0.4s ease forwards;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
 }
