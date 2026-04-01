@@ -1,18 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { COLORS, FONTS, SHADOWS, CARD } from '../styles/theme'
 
-const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1'
-})
+const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1' })
 
-const CATEGORIES = [
-  'All', 'Food & Beverages', 'Fashion & Apparel',
-  'Technology', 'Home Services', 'Education',
-  'Health & Wellness', 'Arts & Crafts', 'Digital & Media'
-]
-
+const CATEGORIES = ['All', 'Food & Beverages', 'Fashion & Apparel', 'Technology', 'Home Services', 'Education', 'Health & Wellness', 'Arts & Crafts', 'Digital & Media']
 const DIFFICULTIES = ['All', 'beginner', 'intermediate', 'expert']
+const DIFF_COLORS = { beginner: '#059669', intermediate: '#D97706', expert: '#DC2626' }
 
 export default function IdeasPage() {
   const navigate = useNavigate()
@@ -27,9 +22,7 @@ export default function IdeasPage() {
   const token = localStorage.getItem('token')
   const headers = { Authorization: `Bearer ${token}` }
 
-  useEffect(() => {
-    loadIdeas()
-  }, [category, difficulty])
+  useEffect(() => { loadIdeas() }, [category, difficulty])
 
   const loadIdeas = async () => {
     setLoading(true)
@@ -39,260 +32,227 @@ export default function IdeasPage() {
       if (difficulty !== 'All') params.difficulty = difficulty
       const res = await api.get('/ideas', { params })
       setIdeas(res.data.data)
-    } catch (err) {
-      console.error(err)
-    }
+    } catch (err) { console.error(err) }
     setLoading(false)
   }
 
-  const showMsg = (msg) => {
-    setMessage(msg)
-    setTimeout(() => setMessage(''), 3000)
+  const showMsg = (msg) => { setMessage(msg); setTimeout(() => setMessage(''), 3000) }
+
+  const handleSave = async (ideaId) => {
+    if (!token) { navigate('/login'); return }
+    setSaving(ideaId)
+    try {
+      const res = await api.post(`/ideas/${ideaId}/save`, {}, { headers })
+      showMsg(res.data.saved ? '✅ Idea saved!' : '🗑️ Idea removed!')
+    } catch (err) { showMsg('❌ Failed to save') }
+    setSaving(null)
   }
 
- const handleSave = async (ideaId) => {
-  if (!token) {
-    navigate('/login')
-    return
-  }
-  setSaving(ideaId)
-  try {
-    const res = await api.post(`/ideas/${ideaId}/save`, {}, { headers })
-    showMsg(res.data.saved ? '✅ Idea saved!' : '🗑️ Idea removed!')
-  } catch (err) {
-    showMsg('❌ Failed to save idea')
-  }
-  setSaving(null)
-}
-
-  // Filter by search locally
   const filtered = ideas.filter(idea =>
     idea.title.toLowerCase().includes(search.toLowerCase()) ||
     idea.description.toLowerCase().includes(search.toLowerCase()) ||
     idea.requiredSkills?.some(s => s.toLowerCase().includes(search.toLowerCase()))
   )
 
-  const difficultyColor = {
-    beginner: '#10B981',
-    intermediate: '#F59E0B',
-    expert: '#EF4444'
-  }
-
   return (
-    <div style={{ minHeight: '100vh', background: '#F8FAF9', fontFamily: 'sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: COLORS.gray50, fontFamily: FONTS.body }}>
 
       {/* Toast */}
       {message && (
         <div style={{
-          position: 'fixed', top: 80, right: 20,
-          background: '#14213D', color: '#fff',
+          position: 'fixed', top: 80, right: 24,
+          background: COLORS.navy900, color: COLORS.white,
           padding: '12px 20px', borderRadius: 10,
           fontSize: 13, fontWeight: 600, zIndex: 1000,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+          boxShadow: SHADOWS.xl,
         }}>{message}</div>
       )}
 
       {/* Hero */}
       <div style={{
-        background: 'linear-gradient(135deg, #14213D, #0D7377)',
-        padding: '32px 24px 50px', textAlign: 'center', color: '#fff'
+        background: `linear-gradient(135deg, ${COLORS.navy900} 0%, ${COLORS.navy700} 100%)`,
+        padding: '56px 60px 80px',
       }}>
-        <div style={{ fontSize: 48, marginBottom: 12 }}>💡</div>
-        <h1 style={{ fontSize: 28, fontWeight: 800, marginBottom: 8 }}>
-          Explore Business Ideas
-        </h1>
-        <p style={{ color: '#94A3B8', fontSize: 15, marginBottom: 24 }}>
-          Find the perfect business idea that matches your skills
-        </p>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <p style={{ fontSize: 11, fontWeight: 700, color: COLORS.gold400, letterSpacing: 2, textTransform: 'uppercase', marginBottom: 12 }}>
+            Business Ideas
+          </p>
+          <h1 style={{ fontFamily: FONTS.display, fontSize: 40, fontWeight: 800, color: COLORS.white, marginBottom: 12 }}>
+            Find Your Perfect Business
+          </h1>
+          <p style={{ fontSize: 15, color: 'rgba(255,255,255,0.45)', marginBottom: 32, maxWidth: 480 }}>
+            Browse our curated collection of business ideas matched to real skills and market opportunities.
+          </p>
 
-        {/* Search Bar */}
-        <div style={{
-          maxWidth: 500, margin: '0 auto',
-          position: 'relative'
-        }}>
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="🔍 Search ideas, skills, categories..."
-            style={{
-              width: '100%', padding: '14px 20px',
-              borderRadius: 12, border: 'none',
-              fontSize: 14, outline: 'none',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
-            }}
-          />
+          {/* Search */}
+          <div style={{ position: 'relative', maxWidth: 560 }}>
+            <span style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: COLORS.gray400, fontSize: 16 }}>🔍</span>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search by idea, skill, or keyword..."
+              style={{
+                width: '100%', padding: '14px 16px 14px 46px',
+                borderRadius: 10, border: 'none',
+                fontSize: 14, outline: 'none', fontFamily: FONTS.body,
+                boxShadow: SHADOWS.lg,
+              }}
+            />
+          </div>
         </div>
       </div>
 
-      <div style={{ maxWidth: 1000, margin: '-24px auto 40px', padding: '0 20px' }}>
+      <div style={{ maxWidth: 1100, margin: '-32px auto 40px', padding: '0 24px' }}>
 
-        {/* Filters */}
-        <div style={{
-          background: '#fff', borderRadius: 16,
-          padding: '20px', marginBottom: 20,
-          boxShadow: '0 2px 12px rgba(0,0,0,0.06)'
-        }}>
-          {/* Category Filter */}
+        {/* Filter Card */}
+        <div style={{ ...CARD, marginBottom: 20, padding: '20px 24px' }}>
           <div style={{ marginBottom: 14 }}>
-            <p style={{ fontSize: 12, fontWeight: 700, color: '#6B7280', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray500, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>
               Category
             </p>
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
               {CATEGORIES.map(c => (
                 <button key={c} onClick={() => setCategory(c)} style={{
-                  background: category === c ? '#0D7377' : '#F3F4F6',
-                  color: category === c ? '#fff' : '#6B7280',
-                  border: 'none', borderRadius: 20,
-                  padding: '6px 14px', fontSize: 12,
-                  fontWeight: 600, cursor: 'pointer',
-                  transition: 'all 0.2s'
+                  background: category === c ? COLORS.navy800 : COLORS.gray50,
+                  color: category === c ? COLORS.white : COLORS.gray600,
+                  border: `1px solid ${category === c ? COLORS.navy800 : COLORS.gray200}`,
+                  borderRadius: 100, padding: '6px 16px', fontSize: 12,
+                  fontWeight: 600, cursor: 'pointer', fontFamily: FONTS.body,
+                  transition: 'all 0.2s',
                 }}>{c}</button>
               ))}
             </div>
           </div>
-
-          {/* Difficulty Filter */}
           <div>
-            <p style={{ fontSize: 12, fontWeight: 700, color: '#6B7280', marginBottom: 8, textTransform: 'uppercase', letterSpacing: 1 }}>
-              Difficulty
+            <p style={{ fontSize: 11, fontWeight: 700, color: COLORS.gray500, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 10 }}>
+              Difficulty Level
             </p>
             <div style={{ display: 'flex', gap: 8 }}>
               {DIFFICULTIES.map(d => (
                 <button key={d} onClick={() => setDifficulty(d)} style={{
-                  background: difficulty === d ? '#14213D' : '#F3F4F6',
-                  color: difficulty === d ? '#fff' : '#6B7280',
-                  border: 'none', borderRadius: 20,
-                  padding: '6px 14px', fontSize: 12,
-                  fontWeight: 600, cursor: 'pointer',
-                  textTransform: 'capitalize'
+                  background: difficulty === d ? COLORS.gold500 : COLORS.gray50,
+                  color: difficulty === d ? COLORS.navy900 : COLORS.gray600,
+                  border: `1px solid ${difficulty === d ? COLORS.gold500 : COLORS.gray200}`,
+                  borderRadius: 100, padding: '6px 16px', fontSize: 12,
+                  fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize',
+                  fontFamily: FONTS.body,
                 }}>{d}</button>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Results Count */}
+        {/* Results Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <p style={{ color: '#6B7280', fontSize: 13 }}>
-            Showing <b>{filtered.length}</b> idea{filtered.length !== 1 ? 's' : ''}
+          <p style={{ fontSize: 13, color: COLORS.gray500 }}>
+            Showing <b style={{ color: COLORS.navy900 }}>{filtered.length}</b> idea{filtered.length !== 1 ? 's' : ''}
             {search && ` for "${search}"`}
           </p>
-          <button onClick={() => {
-            setSearch('')
-            setCategory('All')
-            setDifficulty('All')
-          }} style={{
-            background: 'transparent', color: '#0D7377',
-            border: '1px solid #0D7377', borderRadius: 8,
-            padding: '4px 12px', fontSize: 12,
-            fontWeight: 600, cursor: 'pointer'
+          <button onClick={() => { setSearch(''); setCategory('All'); setDifficulty('All') }} style={{
+            background: 'transparent', color: COLORS.gray500,
+            border: `1px solid ${COLORS.gray200}`, borderRadius: 8,
+            padding: '5px 14px', fontSize: 12, fontWeight: 600,
+            cursor: 'pointer', fontFamily: FONTS.body,
           }}>Clear Filters</button>
         </div>
 
         {/* Ideas Grid */}
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: '#6B7280' }}>
-            ⏳ Loading ideas...
+          <div style={{ textAlign: 'center', padding: '80px', color: COLORS.gray400 }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>⏳</div>
+            <p>Loading ideas...</p>
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px', color: '#6B7280' }}>
+          <div style={{ textAlign: 'center', padding: '80px', color: COLORS.gray400 }}>
             <div style={{ fontSize: 48, marginBottom: 12 }}>🔍</div>
-            <p style={{ fontWeight: 700, marginBottom: 8 }}>No ideas found!</p>
+            <p style={{ fontWeight: 700, fontSize: 16, color: COLORS.navy900, marginBottom: 8 }}>No ideas found</p>
             <p style={{ fontSize: 13 }}>Try different search terms or filters</p>
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-            gap: 16
-          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 18 }}>
             {filtered.map((idea, idx) => (
               <div key={idea._id} style={{
-                background: '#fff', borderRadius: 16,
-                padding: '20px', boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-                border: '2px solid transparent',
+                background: COLORS.white,
+                borderRadius: 16,
+                border: `1px solid ${COLORS.gray200}`,
+                boxShadow: SHADOWS.sm,
+                overflow: 'hidden',
                 transition: 'all 0.2s',
-                cursor: 'pointer',
+                display: 'flex', flexDirection: 'column',
               }}
-                onMouseEnter={e => e.currentTarget.style.border = '2px solid #0D7377'}
-                onMouseLeave={e => e.currentTarget.style.border = '2px solid transparent'}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = SHADOWS.lg; e.currentTarget.style.transform = 'translateY(-2px)' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = SHADOWS.sm; e.currentTarget.style.transform = 'translateY(0)' }}
               >
-                {/* Idea Header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                  <div style={{
-                    width: 52, height: 52, borderRadius: 14,
-                    background: '#E0F2F1', fontSize: 28,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                  }}>{idea.icon || '💡'}</div>
-                  <div>
-                    <h3 style={{ fontSize: 15, fontWeight: 800, color: '#14213D', margin: 0 }}>
-                      {idea.title}
-                    </h3>
-                    <span style={{
-                      fontSize: 10, fontWeight: 700,
-                      color: difficultyColor[idea.difficulty],
-                      textTransform: 'uppercase', letterSpacing: 0.5
-                    }}>{idea.difficulty}</span>
-                  </div>
-                </div>
-
-                {/* Description */}
-                <p style={{ fontSize: 13, color: '#6B7280', marginBottom: 12, lineHeight: 1.6 }}>
-                  {idea.description}
-                </p>
-
-                {/* Category */}
-                <div style={{ marginBottom: 12 }}>
-                  <span style={{
-                    background: '#E0F2F1', color: '#0D7377',
-                    borderRadius: 20, padding: '3px 10px',
-                    fontSize: 11, fontWeight: 600
-                  }}>{idea.category}</span>
-                </div>
-
-                {/* Skills */}
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 14 }}>
-                  {idea.requiredSkills?.map(skill => (
-                    <span key={skill} style={{
-                      background: '#F3F4F6', color: '#374151',
-                      borderRadius: 20, padding: '2px 8px',
-                      fontSize: 10, fontWeight: 600
-                    }}>🔧 {skill}</span>
-                  ))}
-                </div>
-
-                {/* Cost */}
+                {/* Card Top */}
                 <div style={{
-                  fontSize: 12, color: '#6B7280',
-                  marginBottom: 14, display: 'flex',
-                  alignItems: 'center', gap: 4
+                  background: idx % 3 === 0 ? COLORS.navy900 : idx % 3 === 1 ? COLORS.navy800 : COLORS.navy700,
+                  padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
                 }}>
-                  💰 {idea.estimatedCost}
+                  <div style={{
+                    width: 48, height: 48, borderRadius: 12,
+                    background: 'rgba(201,168,76,0.15)',
+                    border: '1px solid rgba(201,168,76,0.2)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 24,
+                  }}>{idea.icon || '💡'}</div>
+                  <span style={{
+                    fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
+                    letterSpacing: 0.5, color: DIFF_COLORS[idea.difficulty],
+                    background: DIFF_COLORS[idea.difficulty] + '20',
+                    border: `1px solid ${DIFF_COLORS[idea.difficulty]}30`,
+                    borderRadius: 100, padding: '3px 10px',
+                  }}>{idea.difficulty}</span>
                 </div>
 
-                {/* Buttons */}
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button
-                    onClick={() => navigate(`/roadmap/${idea._id}`)}
-                    style={{
-                      flex: 2, background: '#0D7377', color: '#fff',
-                      border: 'none', borderRadius: 8,
-                      padding: '10px', fontSize: 12,
-                      fontWeight: 700, cursor: 'pointer'
-                    }}>
-                    View Roadmap →
-                  </button>
-                  <button
-                    onClick={() => handleSave(idea._id)}
-                    disabled={saving === idea._id}
-                    style={{
-                      flex: 1, background: '#F3F4F6', color: '#374151',
-                      border: 'none', borderRadius: 8,
-                      padding: '10px', fontSize: 12,
-                      fontWeight: 700, cursor: 'pointer'
-                    }}>
-                    {saving === idea._id ? '...' : '🔖 Save'}
-                  </button>
+                {/* Card Body */}
+                <div style={{ padding: '18px 20px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  <h3 style={{ fontFamily: FONTS.display, fontSize: 16, fontWeight: 700, color: COLORS.navy900, marginBottom: 6 }}>
+                    {idea.title}
+                  </h3>
+                  <p style={{ fontSize: 12, color: COLORS.gray500, lineHeight: 1.6, marginBottom: 12, flex: 1 }}>
+                    {idea.description}
+                  </p>
+
+                  {/* Category */}
+                  <div style={{ marginBottom: 10 }}>
+                    <span style={{
+                      background: COLORS.navy50, color: COLORS.navy700,
+                      borderRadius: 100, padding: '3px 10px',
+                      fontSize: 11, fontWeight: 600,
+                    }}>{idea.category}</span>
+                  </div>
+
+                  {/* Skills */}
+                  <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', marginBottom: 12 }}>
+                    {idea.requiredSkills?.slice(0, 3).map(skill => (
+                      <span key={skill} style={{
+                        background: COLORS.gray100, color: COLORS.gray600,
+                        borderRadius: 100, padding: '2px 8px', fontSize: 10, fontWeight: 600,
+                      }}>🔧 {skill}</span>
+                    ))}
+                  </div>
+
+                  {/* Cost */}
+                  <div style={{ fontSize: 12, color: COLORS.gray500, marginBottom: 16 }}>
+                    💰 <b style={{ color: COLORS.navy800 }}>{idea.estimatedCost}</b>
+                  </div>
+
+                  {/* Buttons */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button onClick={() => navigate(`/roadmap/${idea._id}`)} style={{
+                      flex: 2, background: `linear-gradient(135deg, ${COLORS.navy800}, ${COLORS.navy900})`,
+                      color: COLORS.white, border: 'none', borderRadius: 8,
+                      padding: '10px', fontSize: 12, fontWeight: 700,
+                      cursor: 'pointer', fontFamily: FONTS.body,
+                    }}>View Roadmap →</button>
+                    <button onClick={() => handleSave(idea._id)} disabled={saving === idea._id} style={{
+                      flex: 1, background: COLORS.gold50,
+                      color: COLORS.gold600,
+                      border: `1px solid ${COLORS.gold200}`,
+                      borderRadius: 8, padding: '10px', fontSize: 12,
+                      fontWeight: 700, cursor: 'pointer', fontFamily: FONTS.body,
+                    }}>{saving === idea._id ? '...' : '🔖'}</button>
+                  </div>
                 </div>
               </div>
             ))}
